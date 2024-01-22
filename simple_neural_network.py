@@ -1,5 +1,6 @@
 import math
 import random
+from typing import *
 
 
 # https://github.com/mattm/simple-neural-network/blob/master/neural-network.py
@@ -23,7 +24,7 @@ import random
 # blog explanation
 # https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 class NeuralNetwork:
-    LEARNING_RATE = 0.035 #0.5
+    LEARNING_RATE: float = 0.035  # 0.5
 
     # inputs                hidden neu            out neus
     #  (0)           ->     (0)             ->     (0)
@@ -31,9 +32,10 @@ class NeuralNetwork:
     #  (n_inputs)    ->     (n_hidden)      ->     (n_outputs)
     #             hidden weitss           out weits
     #             =n_inputs*n_hidden      =n_hidden*n_outputs
-    def __init__(self, num_inputs, num_hidden, num_outputs, hidden_layer_weights=None, hidden_layer_bias=None,
-                 output_layer_weights=None, output_layer_bias=None):
-        self.num_inputs = num_inputs
+    def __init__(self, num_inputs: int, num_hidden: int, num_outputs: int, hidden_layer_weights: List[float] = None,
+                 hidden_layer_bias: float = None,
+                 output_layer_weights: List[float] = None, output_layer_bias: List[float] = None):
+        self.num_inputs: int = num_inputs
 
         self.hidden_layer = NeuronLayer(num_hidden, hidden_layer_bias)
         self.output_layer = NeuronLayer(num_outputs, output_layer_bias)
@@ -50,7 +52,7 @@ class NeuralNetwork:
             for i in range(self.num_inputs):
                 if hidden_layer_weights is None:
                     # for every hidden neuron we add i=num_inputs weights
-                    #self.hidden_layer.neurons[h].weights.append(random.random())
+                    # self.hidden_layer.neurons[h].weights.append(random.random())
                     self.hidden_layer.neurons[h].weights.append(random.uniform(-weight_max, weight_max))
                 else:
                     if (weight_num > (len(hidden_layer_weights) - 1)):
@@ -62,12 +64,12 @@ class NeuralNetwork:
 
     # out weights = num_hidden_neus * num_out_neus
     def init_weights_from_hidden_layer_neurons_to_output_layer_neurons(self, output_layer_weights):
-        weight_max = 1/math.sqrt(len(self.output_layer.neurons))
+        weight_max = 1 / math.sqrt(len(self.output_layer.neurons))
         weight_num = 0
         for o in range(len(self.output_layer.neurons)):
             for h in range(len(self.hidden_layer.neurons)):
                 if output_layer_weights is None:
-                    #self.output_layer.neurons[o].weights.append(random.random())
+                    # self.output_layer.neurons[o].weights.append(random.random())
                     self.output_layer.neurons[o].weights.append(random.uniform(-weight_max, weight_max))
                 else:
                     self.output_layer.neurons[o].weights.append(output_layer_weights[weight_num])
@@ -100,12 +102,12 @@ class NeuralNetwork:
         print('------')
 
     # expect 1 pattern in flat view
-    def feed_forward(self, inputs):
+    def feed_forward(self, inputs: List[int]):
         hidden_layer_outputs = self.hidden_layer.feed_forward(inputs)
         return self.output_layer.feed_forward(hidden_layer_outputs)
 
     # Uses online learning, ie updating the weights after each training case
-    def train(self, training_inputs, training_outputs):
+    def train(self, training_inputs: List[int], training_outputs: List[int]):
         self.feed_forward(training_inputs)
 
         # 1. Output neuron deltas
@@ -171,11 +173,11 @@ class NeuralNetwork:
 
 
 class NeuronLayer:
-    def __init__(self, num_neurons, bias):
+    def __init__(self, num_neurons: int, bias):
 
         # Every neuron in a layer shares the same bias
-        #self.bias = bias if bias else random.random()
-        self.bias = bias if bias else random.uniform(-0.035, 0.035)
+        # self.bias = bias if bias else random.random()
+        self.bias: float = bias if bias else random.uniform(-0.035, 0.035)
 
         self.neurons = []
         for i in range(num_neurons):
@@ -189,7 +191,7 @@ class NeuronLayer:
                 print('  Weight:', self.neurons[n].weights[w])
             print('  Bias:', self.bias)
 
-    def feed_forward(self, inputs):
+    def feed_forward(self, inputs: List[int]):
         outputs = []
         for neuron in self.neurons:
             outputs.append(neuron.calculate_output(inputs))
@@ -207,7 +209,7 @@ class Neuron:
         self.bias = bias
         self.weights = []
 
-    def calculate_output(self, inputs):
+    def calculate_output(self, inputs: List[int]):
         self.inputs = inputs
         self.output = self.squash(self.calculate_total_net_input())
         return self.output
@@ -270,7 +272,3 @@ class Neuron:
         if (index > (len(self.inputs) - 1)):
             print("error")
         return self.inputs[index]
-
-
-
-

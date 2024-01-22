@@ -27,7 +27,7 @@ deactivate
 uzip data.60000.trained.images.zip to ./data
 and run
 
-## use for training
+## use for training - WARNING: it is not implemented
 delete ./data
 source ./env.sh
 python3 main.py -t num-of-images-for-training

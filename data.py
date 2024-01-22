@@ -2,6 +2,7 @@ from keras.datasets import mnist
 import numpy
 from pathlib import Path
 import time
+from typing import *
 
 from utils import *
 

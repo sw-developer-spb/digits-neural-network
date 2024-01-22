@@ -59,6 +59,7 @@ def main_mnist():
 
     #return
     if False:
+        # test input for image #0
         test_idx = 0
         number0 = data.itrain[test_idx]
 
